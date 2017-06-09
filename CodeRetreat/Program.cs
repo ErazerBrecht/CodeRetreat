@@ -30,6 +30,7 @@ namespace CodeRetreat
             List<Point> path = pathFinder.FindPath();
             await SendMap(path);
             Console.WriteLine();
+            Console.ReadKey();
         }
 
         static async Task ParseMap()
@@ -49,6 +50,8 @@ namespace CodeRetreat
             Point start = new Point(0,0);
             Point end = new Point(0,0);
 
+            var teleports = new List<Teleport>();
+
             // Ugly loop to determine start, end and map!
             for (int y = 0; y < lines.Length; y++)
             {
@@ -56,25 +59,34 @@ namespace CodeRetreat
                 {
                     var test = chars[y][x];
 
-                    if(test == 'S')
-                        start = new Point(y, x);
-
-                    if (test == 'F')
-                        end = new Point(y, x);
-
-                    if (test == '1')
-                        map[y, x] = new Tile(TileType.Teleport1);
-
-                    if (test != '#')
-                        map[y, x] = new Tile(TileType.Open);
-                    else
+                    switch (test)
                     {
-                        map[y, x] = new Tile(TileType.Wall);
+                        case 'S':
+                            start = new Point(y, x);
+                            map[y, x] = new Tile(TileType.EmptySpace);
+                            break;
+                        case 'F':
+                            end = new Point(y, x);
+                            map[y, x] = new Tile(TileType.EmptySpace);
+                            break;
+                        case '1':
+                            map[y, x] = new Tile(TileType.Teleport1);
+                            var teleport = new Teleport(new Point(y, x), 1);
+                            teleports.Add(teleport);
+                            break;
+                        case '#':
+                            map[y, x] = new Tile(TileType.Wall);
+                            break;
+                        case '.':
+                            map[y, x] = new Tile(TileType.EmptySpace);
+                            break;
+                        default:
+                            throw new NotSupportedException("Invalid tile type");
                     }
                 }
             }
 
-            parameters = new SearchParameters(start, end, map);
+            parameters = new SearchParameters(start, end, map, teleports);
         }
 
         static async Task SendMap(List<Point> path)

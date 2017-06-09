@@ -13,7 +13,7 @@
     public enum TileType
     {
         Wall,
-        Open,
+        EmptySpace,
         Teleport1
     }
 }

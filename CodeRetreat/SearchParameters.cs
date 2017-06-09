@@ -12,11 +12,14 @@ namespace CodeRetreat
 
         public Tile[,] Map { get; set; }
 
-        public SearchParameters(Point startLocation, Point endLocation, Tile[,] map)
+        public IEnumerable<Teleport> Teleports { get; set; }
+
+        public SearchParameters(Point startLocation, Point endLocation, Tile[,] map, IEnumerable<Teleport> teleports)
         {
             this.StartLocation = startLocation;
             this.EndLocation = endLocation;
             this.Map = map;
+            Teleports = teleports;
         }
     }
 

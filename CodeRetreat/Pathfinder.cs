@@ -116,14 +116,21 @@ namespace CodeRetreat
 
             foreach (var location in nextLocations)
             {
+   
                 int x = location.X;
                 int y = location.Y;
+
+
+
 
                 // Stay within the grid's boundaries
                 if (x < 0 || x >= this.width || y < 0 || y >= this.height)
                     continue;
 
                 Node node = this.nodes[x, y];
+
+                Console.WriteLine($"Checking location: {x},{y}: {node.TileInfo.TileType}");
+
                 // Ignore non-walkable nodes
                 if (node.TileInfo.TileType == TileType.Wall)
                     continue;
@@ -132,23 +139,58 @@ namespace CodeRetreat
                 if (node.State == NodeState.Closed)
                     continue;
 
-                // Already-open nodes are only added to the list if their G-value is lower going via this route.
-                if (node.State == NodeState.Open)
+                if (node.TileInfo.TileType == TileType.EmptySpace)
                 {
-                    float traversalCost = Node.GetTraversalCost(node.Location, node.ParentNode.Location);
-                    float gTemp = fromNode.G + traversalCost;
-                    if (gTemp < node.G)
+                    // Already-open nodes are only added to the list if their G-value is lower going via this route.
+                    if (node.State == NodeState.Open)
                     {
+                        float traversalCost = Node.GetTraversalCost(node.Location, node.ParentNode.Location);
+                        float gTemp = fromNode.G + traversalCost;
+                        if (gTemp < node.G)
+                        {
+                            node.ParentNode = fromNode;
+                            walkableNodes.Add(node);
+                        }
+                    }
+                    else
+                    {
+                        // If it's untested, set the parent and flag it as 'Open' for consideration
                         node.ParentNode = fromNode;
+                        node.State = NodeState.Open;
                         walkableNodes.Add(node);
                     }
                 }
-                else
+
+                if (node.TileInfo.TileType == TileType.Teleport1)
                 {
-                    // If it's untested, set the parent and flag it as 'Open' for consideration
-                    node.ParentNode = fromNode;
-                    node.State = NodeState.Open;
-                    walkableNodes.Add(node);
+                    var thisTeleport = searchParameters.Teleports
+                        .Single(t => t.Location.Y == node.Location.Y && t.Location.X == node.Location.X);
+
+                    var otherTeleport = searchParameters.Teleports
+                        .Single(t => t.TeleportIndex == thisTeleport.TeleportIndex && t != thisTeleport);
+
+                    var otherTeleportNodeOnMap =
+                        nodes[otherTeleport.Location.Y, otherTeleport.Location.X];
+
+
+                    // Already-open nodes are only added to the list if their G-value is lower going via this route.
+                    if (node.State == NodeState.Open)
+                    {
+                        float traversalCost = Node.GetTraversalCost(node.Location, node.ParentNode.Location);
+                        float gTemp = fromNode.G + traversalCost;
+                        if (gTemp < node.G)
+                        {
+                            node.ParentNode = otherTeleportNodeOnMap;
+                            walkableNodes.Add(node);
+                        }
+                    }
+                    else
+                    {
+                        // If it's untested, set the parent and flag it as 'Open' for consideration
+                        node.ParentNode = otherTeleportNodeOnMap;
+                        node.State = NodeState.Open;
+                        walkableNodes.Add(node);
+                    }
                 }
             }
 
