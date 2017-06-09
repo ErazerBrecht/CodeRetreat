@@ -37,30 +37,33 @@ namespace CodeRetreat
             var client = new HttpClient();
 
             // Get level
-            var result = (await client.GetAsync("http://mazeretreat.azurewebsites.net/mazes/09a655dd-6cbd-4793-89cf-604d2b0a8330")).Content.ReadAsStringAsync().Result;
+            var result = (await client.GetAsync("http://mazeretreat.azurewebsites.net/mazes/51b8269c-00e2-4486-ac05-f4490942c0c9")).Content.ReadAsStringAsync().Result;
 
             string[] lines = result.Replace("\"", "").Split(new string[] { "\\r\\n" }, StringSplitOptions.None);
             var chars = lines.Select(l => l.ToCharArray()).ToArray();
 
+            var lineLength = lines.ElementAt(0).Length;
+
             // Intiliaze map
-            var map = new bool[lines.Length, lines.Length];
+            var map = new bool[lines.Length, lineLength];
             Point start = new Point(0,0);
             Point end = new Point(0,0);
 
             // Ugly loop to determine start, end and map!
-            for (int i = 0; i < lines.Length; i++)
+            for (int y = 0; y < lines.Length; y++)
             {
-                for (int k = 0; k < lines.Length; k++)
+                for (int x = 0; x < lineLength; x++)
                 {
-                    var test = chars[i][k];
+                    var test = chars[y][x];
 
                     if(test == 'S')
-                        start = new Point(i, k);
-                    else if (test == 'F')
-                        end = new Point(i, k);
+                        start = new Point(y, x);
+
+                    if (test == 'F')
+                        end = new Point(y, x);
 
                     if (test != '#')
-                        map[i, k] = true;
+                        map[y, x] = true;
                 }
             }
 
@@ -79,8 +82,8 @@ namespace CodeRetreat
 
             var a = new
             {
-                TeamName = "YOLO",
-                MazeId = "09a655dd-6cbd-4793-89cf-604d2b0a8330",
+                TeamName = "BramKen",
+                MazeId = "51b8269c-00e2-4486-ac05-f4490942c0c9",
                 Solution = lol
             };
 
@@ -88,7 +91,7 @@ namespace CodeRetreat
 
             //Post
             var error = await client.PostAsync(
-                "http://mazeretreat.azurewebsites.net/solutions/09a655dd-6cbd-4793-89cf-604d2b0a8330",
+                "http://mazeretreat.azurewebsites.net/solutions/51b8269c-00e2-4486-ac05-f4490942c0c9",
                 new StringContent(jsonInString, Encoding.UTF8, "application/json"));
         }
     }

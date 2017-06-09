@@ -164,13 +164,13 @@ namespace CodeRetreat
         {
             return new Point[]
             {
-                new Point(fromLocation.X-1, fromLocation.Y-1),
+            //    new Point(fromLocation.X-1, fromLocation.Y-1),
                 new Point(fromLocation.X-1, fromLocation.Y  ),
-                new Point(fromLocation.X-1, fromLocation.Y+1),
+              //  new Point(fromLocation.X-1, fromLocation.Y+1),
                 new Point(fromLocation.X,   fromLocation.Y+1),
-                new Point(fromLocation.X+1, fromLocation.Y+1),
+              //  new Point(fromLocation.X+1, fromLocation.Y+1),
                 new Point(fromLocation.X+1, fromLocation.Y  ),
-                new Point(fromLocation.X+1, fromLocation.Y-1),
+               // new Point(fromLocation.X+1, fromLocation.Y-1),
                 new Point(fromLocation.X,   fromLocation.Y-1)
             };
         }
