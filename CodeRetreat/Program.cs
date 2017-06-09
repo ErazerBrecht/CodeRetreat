@@ -45,7 +45,7 @@ namespace CodeRetreat
             var lineLength = lines.ElementAt(0).Length;
 
             // Intiliaze map
-            var map = new bool[lines.Length, lineLength];
+            var map = new Tile[lines.Length, lineLength];
             Point start = new Point(0,0);
             Point end = new Point(0,0);
 
@@ -62,8 +62,15 @@ namespace CodeRetreat
                     if (test == 'F')
                         end = new Point(y, x);
 
+                    if (test == '1')
+                        map[y, x] = new Tile(TileType.Teleport1);
+
                     if (test != '#')
-                        map[y, x] = true;
+                        map[y, x] = new Tile(TileType.Open);
+                    else
+                    {
+                        map[y, x] = new Tile(TileType.Wall);
+                    }
                 }
             }
 

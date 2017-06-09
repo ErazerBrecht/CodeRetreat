@@ -15,9 +15,9 @@ namespace CodeRetreat
         public Point Location { get; private set; }
 
         /// <summary>
-        /// True when the node may be traversed, otherwise false
+        /// Info about the tile
         /// </summary>
-        public bool IsWalkable { get; set; }
+        public Tile TileInfo { get; set; }
 
         /// <summary>
         /// Cost from start to here
@@ -61,13 +61,13 @@ namespace CodeRetreat
         /// </summary>
         /// <param name="x">The node's location along the X axis</param>
         /// <param name="y">The node's location along the Y axis</param>
-        /// <param name="isWalkable">True if the node can be traversed, false if the node is a wall</param>
+        /// <param name="tileInfo">Info about the tile</param>
         /// <param name="endLocation">The location of the destination node</param>
-        public Node(int x, int y, bool isWalkable, Point endLocation)
+        public Node(int x, int y, Tile tileInfo, Point endLocation)
         {
             this.Location = new Point(x, y);
             this.State = NodeState.Untested;
-            this.IsWalkable = isWalkable;
+            this.TileInfo = tileInfo;
             this.H = GetTraversalCost(this.Location, endLocation);
             this.G = 0;
         }

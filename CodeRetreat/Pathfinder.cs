@@ -58,7 +58,7 @@ namespace CodeRetreat
         /// Builds the node grid from a simple grid of booleans indicating areas which are and aren't walkable
         /// </summary>
         /// <param name="map">A boolean representation of a grid in which true = walkable and false = not walkable</param>
-        private void InitializeNodes(bool[,] map)
+        private void InitializeNodes(Tile[,] map)
         {
             this.width = map.GetLength(0);
             this.height = map.GetLength(1);
@@ -125,7 +125,7 @@ namespace CodeRetreat
 
                 Node node = this.nodes[x, y];
                 // Ignore non-walkable nodes
-                if (!node.IsWalkable)
+                if (node.TileInfo.TileType == TileType.Wall)
                     continue;
 
                 // Ignore already-closed nodes
@@ -164,13 +164,9 @@ namespace CodeRetreat
         {
             return new Point[]
             {
-            //    new Point(fromLocation.X-1, fromLocation.Y-1),
                 new Point(fromLocation.X-1, fromLocation.Y  ),
-              //  new Point(fromLocation.X-1, fromLocation.Y+1),
                 new Point(fromLocation.X,   fromLocation.Y+1),
-              //  new Point(fromLocation.X+1, fromLocation.Y+1),
                 new Point(fromLocation.X+1, fromLocation.Y  ),
-               // new Point(fromLocation.X+1, fromLocation.Y-1),
                 new Point(fromLocation.X,   fromLocation.Y-1)
             };
         }
